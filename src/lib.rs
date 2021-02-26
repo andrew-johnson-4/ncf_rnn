@@ -9,6 +9,14 @@ impl ParseResult {
 }
 
 pub struct ProbabilisticGrammar {
+   dropdown_penalty: f64,
+}
+impl Default for ProbabilisticGrammar {
+    fn default() -> Self {
+       ProbabilisticGrammar {
+          dropdown_penalty: 0.9
+       }
+    }
 }
 impl ProbabilisticGrammar {
    pub fn train<P: AsRef<std::path::Path>>(&self, p: P) {} 
@@ -18,5 +26,5 @@ impl ProbabilisticGrammar {
 }
 
 pub fn load_grammar(encf: &str) -> ProbabilisticGrammar {
-   ProbabilisticGrammar {}
+   Default::default()
 }
