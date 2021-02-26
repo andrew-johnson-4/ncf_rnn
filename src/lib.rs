@@ -39,7 +39,7 @@ pub struct GrammarNode {
 
 pub enum GrammarRule {
    //The first value in each enum tuple is the rule identifier
-   //identifiers are used to index the flattened ruleset NFA
+   //Identifiers are used to index the flattened ruleset NFA
    //0 means continue current open node
    //n means open rule N
    //-n means close rule N
