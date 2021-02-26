@@ -13,7 +13,7 @@ pub struct ProbabilisticGrammar {
    dropdown_penalty: f64,
 
    //The max_lines hyper-parameter is the maximum number of active parse lines for a parse attempt
-   //extra lines over this limit will be pruned based on their perplexity score
+   //Extra lines over this limit will be pruned based on their perplexity score
    max_lines: u64,
 }
 impl Default for ProbabilisticGrammar {
