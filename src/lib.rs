@@ -13,13 +13,14 @@ impl ParseResult {
 }
 
 
-pub struct ParseSpan {
-   rule_applied: Vec<usize>,
-   range: (usize,usize)
-}
 pub struct ParseLine {
+   //0 means continue current open node
+   //n means open rule N
+   //-n means close rule N
+   //A ParseLine should contain exactly as many zeros as input characters
+   //The ParseLine should also match each open rule to a closing rule at corresponding depth
    grammar: ProbabilisticGrammar,
-   satisfied_rules: Vec<ParseSpan>,
+   satisfied_rules: Vec<i64>,
 }
 
 impl ParseLine {
@@ -39,12 +40,7 @@ pub struct GrammarNode {
 
 pub enum GrammarRule {
    //The first value in each enum tuple is the rule identifier
-   //Identifiers are used to index the flattened ruleset NFA
-   //0 means continue current open node
-   //n means open rule N
-   //-n means close rule N
-   //A parseline should contain exactly as many zeros as input characters
-   //The parseline should also match each open rule to a closing rule at corresponding depth
+   //Identifiers are used to index the flattened ruleset NFA and to build ParseLines
    Node(i64,String,GrammarNode),
    Seq(i64,String,Vec<GrammarRule>),
    Any(i64,String,Vec<GrammarRule>),
