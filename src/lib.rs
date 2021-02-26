@@ -58,6 +58,7 @@ pub struct ProbabilisticGrammar {
    //Extra lines over this limit will be pruned based on their perplexity score
    max_lines: usize,
 
+   //This is the grammar starting from ROOT
    grammar_rules: Option<GrammarRule>,
 
    //This is used for calculating posteriors, which are flattened into a DFA graph
