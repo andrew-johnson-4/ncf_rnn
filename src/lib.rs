@@ -9,12 +9,18 @@ impl ParseResult {
 }
 
 pub struct ProbabilisticGrammar {
+   //The dropdown_penalty hyper-parameter discourages parse lines that introduce many grammar nodes
    dropdown_penalty: f64,
+
+   //The max_lines hyper-parameter is the maximum number of active parse lines for a parse attempt
+   //extra lines over this limit will be pruned based on their perplexity score
+   max_lines: u64,
 }
 impl Default for ProbabilisticGrammar {
     fn default() -> Self {
        ProbabilisticGrammar {
-          dropdown_penalty: 0.9
+          dropdown_penalty: 0.9,
+          max_lines: 10_000,
        }
     }
 }
@@ -24,9 +30,6 @@ impl ProbabilisticGrammar {
    }
    pub fn train<P: AsRef<std::path::Path>>(&self, p: P) {} 
    pub fn recognize(&self, cs: &str) -> ParseResult {
-      //During parsing we merge Parse Lines that reach the same Grammar Vertex.
-      //This keeps the size of our Parse Result from expanding over O(ns) with respect to
-      //how many Grammar Vertexes we have defined (n) and the length of the parsed sentence (s).
       ParseResult {}
    }
 }
