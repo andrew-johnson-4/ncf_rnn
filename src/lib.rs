@@ -1,4 +1,5 @@
 use autograd as ag;
+use autograd::ndarray::Array2;
 use std::rc::Rc;
 use std::collections::HashMap;
 
@@ -64,7 +65,7 @@ pub struct ProbabilisticGrammar {
 
    //This is used for calculating posteriors, which are flattened into a DFA graph
    //This is not for parsing directly, because parsing is still Context Free
-   grammar_tensor: Rc<HashMap<(i64,i64),f64>>,
+   grammar_tensor: Rc<Array2<f64>>,
 
    //This index is for quick retrieval of grammar rules during parsing
    grammar_index: Rc<Vec<Rc<GrammarRule>>>,
@@ -76,7 +77,7 @@ impl Default for ProbabilisticGrammar {
           dropdown_penalty: 0.9,
           max_lines: 10_000,
           grammar_rules: None,
-          grammar_tensor: Rc::new(HashMap::new()),
+          grammar_tensor: Rc::new(Array2::<f64>::zeros((0,0))),
           grammar_index: Rc::new(Vec::new()),
        }
     }
