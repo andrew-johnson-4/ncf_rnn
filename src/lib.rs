@@ -48,9 +48,6 @@ pub enum GrammarRule {
    Any(i64,String,Vec<Rc<GrammarRule>>),
 }
 
-pub struct GrammarGraph {
-
-}
 
 #[derive(Clone)]
 pub struct ProbabilisticGrammar {
@@ -65,10 +62,10 @@ pub struct ProbabilisticGrammar {
 
    //This is used for calculating posteriors, which are flattened into a DFA graph
    //This is not for parsing directly, because parsing is still Context Free
-   grammar_tensor: Vec<Vec<f64>>,
+   grammar_tensor: Rc<Vec<Vec<f64>>>,
 
    //This index is for quick retrieval of grammar rules during parsing
-   grammar_index: Vec<GrammarRule>,
+   grammar_index: Rc<Vec<GrammarRule>>,
 }
 
 impl Default for ProbabilisticGrammar {
