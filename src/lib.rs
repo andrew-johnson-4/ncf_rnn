@@ -13,6 +13,7 @@ impl ParseResult {
 
 pub struct ParseLine {
 }
+
 impl ParseLine {
    pub fn poke(&self, c: char) -> Vec<ParseLine> {
       Vec::new()
