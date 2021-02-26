@@ -1,17 +1,20 @@
 use autograd as ag;
-
+use std::rc::Rc;
 
 pub struct ParseResult {
+   grammar: ProbabilisticGrammar,
+   result: Vec<ParseLine>
 }
 
 impl ParseResult {
    pub fn probability(&self) -> f64 {
-      0.0
+      self.result.get(0).map_or(0., |l| l.probability())
    }
 }
 
 
 pub struct ParseLine {
+   grammar: ProbabilisticGrammar,
 }
 
 impl ParseLine {
@@ -24,7 +27,7 @@ impl ParseLine {
    }
 }
 
-
+#[derive(Clone)]
 pub struct ProbabilisticGrammar {
    //The dropdown_penalty hyper-parameter discourages parse lines that introduce many grammar nodes
    dropdown_penalty: f64,
@@ -62,7 +65,10 @@ impl ProbabilisticGrammar {
          new_lines.truncate(self.max_lines);
          lines = new_lines;
       }
-      ParseResult {}
+      ParseResult {
+         grammar: self.clone(),
+         result: lines
+      }
    }
 }
 
