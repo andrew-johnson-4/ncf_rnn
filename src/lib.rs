@@ -15,6 +15,7 @@ impl ParseResult {
 
 pub struct ParseLine {
    //0 means continue current open node
+   //1 means open ROOT
    //n means open rule N
    //-n means close rule N
    //A ParseLine should contain exactly as many zeros as input characters
