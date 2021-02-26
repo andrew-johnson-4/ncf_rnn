@@ -37,11 +37,10 @@ pub struct GrammarNode {
    terminal: bool,
 }
 
-#[derive(Clone)]
 pub enum GrammarRule {
-   Node(usize,String,Rc<GrammarNode>),
-   Seq(usize,String,Rc<Vec<GrammarRule>>),
-   Any(usize,String,Rc<Vec<GrammarRule>>),
+   Node(usize,String,GrammarNode),
+   Seq(usize,String,Vec<GrammarRule>),
+   Any(usize,String,Vec<GrammarRule>),
 }
 
 pub struct GrammarGraph {
@@ -59,7 +58,7 @@ pub struct ProbabilisticGrammar {
    //Extra lines over this limit will be pruned based on their perplexity score
    max_lines: usize,
 
-   grammar_rules: Option<GrammarRule>,
+   grammar_rules: Option<Rc<GrammarRule>>,
 }
 
 impl Default for ProbabilisticGrammar {
