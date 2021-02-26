@@ -39,7 +39,8 @@ pub struct GrammarNode {
 
 #[derive(Clone)]
 pub enum GrammarRule {
-   Seq(usize,String,Rc<Vec<GrammarNode>>),
+   Node(usize,String,Rc<GrammarNode>),
+   Seq(usize,String,Rc<Vec<GrammarRule>>),
    Any(usize,String,Rc<Vec<GrammarRule>>),
 }
 
