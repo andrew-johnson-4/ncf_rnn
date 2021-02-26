@@ -13,8 +13,13 @@ impl ParseResult {
 }
 
 
+pub struct ParseSpan {
+   rule_applied: Vec<usize>,
+   range: (usize,usize)
+}
 pub struct ParseLine {
    grammar: ProbabilisticGrammar,
+   satisfied_rules: Vec<ParseSpan>,
 }
 
 impl ParseLine {
@@ -32,9 +37,10 @@ pub struct GrammarNode {
    terminal: bool,
 }
 
+#[derive(Clone)]
 pub enum GrammarRule {
-   Seq(Vec<GrammarNode>),
-   Any(Vec<GrammarRule>),
+   Seq(Rc<Vec<GrammarNode>>),
+   Any(Rc<Vec<GrammarRule>>),
 }
 
 #[derive(Clone)]
@@ -46,7 +52,7 @@ pub struct ProbabilisticGrammar {
    //Extra lines over this limit will be pruned based on their perplexity score
    max_lines: usize,
 
-   grammar_rules: Option<Rc<GrammarRule>>,
+   grammar_rules: Option<GrammarRule>,
 }
 
 impl Default for ProbabilisticGrammar {
@@ -54,7 +60,7 @@ impl Default for ProbabilisticGrammar {
        ProbabilisticGrammar {
           dropdown_penalty: 0.9,
           max_lines: 10_000,
-          grammar_rules: None
+          grammar_rules: None,
        }
     }
 }
@@ -67,7 +73,12 @@ impl ProbabilisticGrammar {
    pub fn train<P: AsRef<std::path::Path>>(&self, dat: P) {} 
 
    pub fn recognize(&self, cs: &str) -> ParseResult {
-      let mut lines: Vec<ParseLine> = vec![ /*grammar ROOT*/ ];
+      let mut lines: Vec<ParseLine> = if let Some(gr) = &self.grammar_rules {
+         vec![ ParseLine {
+            grammar: self.clone(),
+            satisfied_rules: Vec::new(),
+         } ]
+      } else { vec![] };
       for c in cs.chars() {
          let mut new_lines: Vec<ParseLine> = Vec::new();
          for l in lines.iter() {
