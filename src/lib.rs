@@ -39,18 +39,17 @@ pub struct GrammarNode {
    terminal: bool,
 }
 
+#[derive(Clone)]
 pub enum GrammarRule {
    //The first value in each enum tuple is the rule identifier
    //Identifiers are used to index the flattened ruleset NFA and to build ParseLines
-   Node(i64,String,GrammarNode),
-   Seq(i64,String,Vec<GrammarRule>),
-   Any(i64,String,Vec<GrammarRule>),
+   Node(i64,String,Rc<GrammarNode>),
+   Seq(i64,String,Vec<Rc<GrammarRule>>),
+   Any(i64,String,Vec<Rc<GrammarRule>>),
 }
 
 pub struct GrammarGraph {
-   //This is used for calculating posteriors, which are flattened into a DFA graph
-   //This is not for parsing directly, because parsing is still Context Free
-   tensor: Vec<Vec<f64>>,
+
 }
 
 #[derive(Clone)]
@@ -62,7 +61,14 @@ pub struct ProbabilisticGrammar {
    //Extra lines over this limit will be pruned based on their perplexity score
    max_lines: usize,
 
-   grammar_rules: Option<Rc<GrammarRule>>,
+   grammar_rules: Option<GrammarRule>,
+
+   //This is used for calculating posteriors, which are flattened into a DFA graph
+   //This is not for parsing directly, because parsing is still Context Free
+   grammar_tensor: Vec<Vec<f64>>,
+
+   //This index is for quick retrieval of grammar rules during parsing
+   grammar_index: Vec<GrammarRule>,
 }
 
 impl Default for ProbabilisticGrammar {
@@ -71,6 +77,8 @@ impl Default for ProbabilisticGrammar {
           dropdown_penalty: 0.9,
           max_lines: 10_000,
           grammar_rules: None,
+          grammar_tensor: Vec::new(),
+          grammar_index: Vec::new(),
        }
     }
 }
