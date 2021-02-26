@@ -19,12 +19,12 @@ impl Default for ProbabilisticGrammar {
     }
 }
 impl ProbabilisticGrammar {
+   pub fn load(encf: &str) -> Self {
+      Default::default()
+   }
    pub fn train<P: AsRef<std::path::Path>>(&self, p: P) {} 
    pub fn recognize(&self, cs: &str) -> ParseResult {
       ParseResult {}
    }
 }
 
-pub fn load_grammar(encf: &str) -> ProbabilisticGrammar {
-   Default::default()
-}
