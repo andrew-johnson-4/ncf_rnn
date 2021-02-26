@@ -38,9 +38,14 @@ pub struct GrammarNode {
 }
 
 pub enum GrammarRule {
-   Node(usize,String,GrammarNode),
-   Seq(usize,String,Vec<GrammarRule>),
-   Any(usize,String,Vec<GrammarRule>),
+   //The first value in each enum tuple is the rule identifier
+   //identifier are used to index the flattened ruleset NFA
+   //0 means continue current open node
+   //n means open rule N
+   //-n means close rule N
+   Node(i64,String,GrammarNode),
+   Seq(i64,String,Vec<GrammarRule>),
+   Any(i64,String,Vec<GrammarRule>),
 }
 
 pub struct GrammarGraph {
