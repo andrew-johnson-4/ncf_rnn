@@ -27,6 +27,16 @@ impl ParseLine {
    }
 }
 
+pub struct GrammarNode {
+   accepts: Box<Fn(&Vec<char>) -> bool>,
+   terminal: bool,
+}
+
+pub enum GrammarRule {
+   Seq(Vec<GrammarNode>),
+   Any(Vec<GrammarRule>),
+}
+
 #[derive(Clone)]
 pub struct ProbabilisticGrammar {
    //The dropdown_penalty hyper-parameter discourages parse lines that introduce many grammar nodes
@@ -35,6 +45,8 @@ pub struct ProbabilisticGrammar {
    //The max_lines hyper-parameter is the maximum number of active parse lines for a parse attempt
    //Extra lines over this limit will be pruned based on their perplexity score
    max_lines: usize,
+
+   grammar_rules: Option<Rc<GrammarRule>>,
 }
 
 impl Default for ProbabilisticGrammar {
@@ -42,6 +54,7 @@ impl Default for ProbabilisticGrammar {
        ProbabilisticGrammar {
           dropdown_penalty: 0.9,
           max_lines: 10_000,
+          grammar_rules: None
        }
     }
 }
