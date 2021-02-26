@@ -43,6 +43,8 @@ pub enum GrammarRule {
    //0 means continue current open node
    //n means open rule N
    //-n means close rule N
+   //A parseline should contain exactly as many zeros as input characters
+   //The parseline should also match each open rule to a closing rule at corresponding depth
    Node(i64,String,GrammarNode),
    Seq(i64,String,Vec<GrammarRule>),
    Any(i64,String,Vec<GrammarRule>),
