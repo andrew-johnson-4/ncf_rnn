@@ -1,7 +1,5 @@
-use autograd as ag;
 use autograd::ndarray::Array2;
 use std::rc::Rc;
-use std::collections::HashMap;
 
 pub struct ParseResult {
    grammar: Rc<ProbabilisticGrammar>,
