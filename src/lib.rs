@@ -39,8 +39,14 @@ pub struct GrammarNode {
 
 #[derive(Clone)]
 pub enum GrammarRule {
-   Seq(Rc<Vec<GrammarNode>>),
-   Any(Rc<Vec<GrammarRule>>),
+   Seq(usize,String,Rc<Vec<GrammarNode>>),
+   Any(usize,String,Rc<Vec<GrammarRule>>),
+}
+
+pub struct GrammarGraph {
+   //This is used for calculating posteriors, which are flattened into a DFA graph
+   //This is not for parsing directly, because parsing is still Context Free
+   tensor: Vec<Vec<f64>>,
 }
 
 #[derive(Clone)]
