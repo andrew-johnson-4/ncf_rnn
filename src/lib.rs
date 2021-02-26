@@ -11,6 +11,7 @@ impl ParseResult {
 pub struct ProbabilisticGrammar {
 }
 impl ProbabilisticGrammar {
+   pub fn train<P: AsRef<std::path::Path>>(&self, p: P) {} 
    pub fn recognize(&self, cs: &str) -> ParseResult {
       ParseResult {}
    }
