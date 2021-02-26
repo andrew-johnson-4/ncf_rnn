@@ -1,5 +1,5 @@
 +ROOT  = (word | space | punct)+
 +word  = [a-Z]+
--word  = stupid dirty ugly turd
+-word  = "stupid" | "dirty" | "ugly" | "turd"
 +space = [ ]
 +punct = [!,.]
