@@ -86,7 +86,7 @@ impl ProbabilisticGrammar {
       let mut lines: Vec<ParseLine> = if let Some(gr) = &self.grammar_rules {
          vec![ ParseLine {
             grammar: self.clone(),
-            satisfied_rules: Vec::new(),
+            satisfied_rules: vec![1],
          } ]
       } else { vec![] };
       for c in cs.chars() {
