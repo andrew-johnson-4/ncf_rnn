@@ -3,7 +3,7 @@ use std::rc::Rc;
 use std::collections::HashMap;
 
 pub struct ParseResult {
-   grammar: ProbabilisticGrammar,
+   grammar: Rc<ProbabilisticGrammar>,
    result: Vec<ParseLine>
 }
 
@@ -21,7 +21,7 @@ pub struct ParseLine {
    //-n means close rule N
    //A ParseLine should contain exactly as many zeros as input characters
    //The ParseLine should also match each open rule to a closing rule at corresponding depth
-   grammar: ProbabilisticGrammar,
+   grammar: Rc<ProbabilisticGrammar>,
    satisfied_rules: Vec<i64>,
 }
 
@@ -60,14 +60,14 @@ pub struct ProbabilisticGrammar {
    max_lines: usize,
 
    //This is the grammar starting from ROOT
-   grammar_rules: Option<GrammarRule>,
+   grammar_rules: Option<Rc<GrammarRule>>,
 
    //This is used for calculating posteriors, which are flattened into a DFA graph
    //This is not for parsing directly, because parsing is still Context Free
    grammar_tensor: Rc<HashMap<(i64,i64),f64>>,
 
    //This index is for quick retrieval of grammar rules during parsing
-   grammar_index: Rc<Vec<GrammarRule>>,
+   grammar_index: Rc<Vec<Rc<GrammarRule>>>,
 }
 
 impl Default for ProbabilisticGrammar {
@@ -90,9 +90,10 @@ impl ProbabilisticGrammar {
    pub fn train<P: AsRef<std::path::Path>>(&self, dat: P) {} 
 
    pub fn recognize(&self, cs: &str) -> ParseResult {
+      let rcs = Rc::new(self.clone());
       let mut lines: Vec<ParseLine> = if let Some(gr) = &self.grammar_rules {
          vec![ ParseLine {
-            grammar: self.clone(),
+            grammar: rcs.clone(),
             satisfied_rules: vec![1],
          } ]
       } else { vec![] };
@@ -107,7 +108,7 @@ impl ProbabilisticGrammar {
          lines = new_lines;
       }
       ParseResult {
-         grammar: self.clone(),
+         grammar: rcs.clone(),
          result: lines
       }
    }
