@@ -26,7 +26,19 @@ pub struct ParseLine {
 
 impl ParseLine {
    pub fn poke(&self, c: char) -> Vec<ParseLine> {
-      Vec::new()
+      if self.satisfied_rules.last()==Some(&-1) {
+         //ROOT is closed
+         Vec::new()
+      } else {
+         //find current grammar point
+         // [1,2,0,-2,3]
+         //open n1
+         // open n2
+         // continue n2
+         // close n2
+         // open n3
+         Vec::new() 
+      }
    }
 
    pub fn probability(&self) -> f64 {
