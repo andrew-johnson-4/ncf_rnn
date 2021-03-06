@@ -45,6 +45,7 @@ impl ParseLine {
    }
 
    pub fn poke(&self, cs: &[char]) -> Vec<ParseLine> {
+      assert!(self.satisfied_rules.len()>0);
       if self.satisfied_rules.last()==Some(&-1) {
          //ROOT is closed
          Vec::new()
@@ -52,8 +53,13 @@ impl ParseLine {
          let mut acc = Vec::new();
          let open = self.open_rules();
          let passed = self.passed_tokens();
-         //TODO
-         //return expanded parseline from open ruleset
+         let active = *open.last().unwrap();
+         match self.grammar.lookup(active).as_ref() {
+            //return expanded parseline from open ruleset
+            GrammarRule::Node(_id,_name,_node) => {},
+            GrammarRule::Seq(_id,_name,_rule) => {},
+            GrammarRule::Any(_id,_name,_rule) => {},
+         }
          acc
       }
    }
@@ -114,6 +120,11 @@ impl Default for ProbabilisticGrammar {
 }
 
 impl ProbabilisticGrammar {
+   pub fn lookup(&self, i: i64) -> Rc<GrammarRule> {
+      assert!(i>0 && i<(self.grammar_index.len() as i64)+1);
+      self.grammar_index[(i-1) as usize].clone()
+   }
+
    pub fn load<P: AsRef<std::path::Path>>(_encf: P) -> Self {
       Default::default()
    }
