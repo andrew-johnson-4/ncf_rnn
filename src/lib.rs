@@ -2,8 +2,8 @@ use autograd::ndarray::Array2;
 use std::rc::Rc;
 
 pub struct ParseResult {
-   grammar: Rc<ProbabilisticGrammar>,
-   result: Vec<ParseLine>
+   pub grammar: Rc<ProbabilisticGrammar>,
+   pub result: Vec<ParseLine>
 }
 
 impl ParseResult {
@@ -20,24 +20,34 @@ pub struct ParseLine {
    //-n means close rule N
    //A ParseLine should contain exactly as many zeros as input characters
    //The ParseLine should also match each open rule to a closing rule at corresponding depth
-   grammar: Rc<ProbabilisticGrammar>,
-   satisfied_rules: Vec<i64>,
+   pub grammar: Rc<ProbabilisticGrammar>,
+   pub satisfied_rules: Vec<i64>,
 }
 
 impl ParseLine {
+   pub fn open_rules(&self) -> Vec<i64> {
+      let mut open = Vec::new();
+      for r in self.satisfied_rules.iter() {
+         if *r==0 { /* pass */ }
+         else if *r>0 { 
+            open.push(*r);
+         } else {
+            assert!(open.pop() == Some(-r));
+         }
+      }
+      open
+   }
+
    pub fn poke(&self, c: char) -> Vec<ParseLine> {
       if self.satisfied_rules.last()==Some(&-1) {
          //ROOT is closed
          Vec::new()
       } else {
-         //find current grammar point
-         // [1,2,0,-2,3]
-         //open n1
-         // open n2
-         // continue n2
-         // close n2
-         // open n3
-         Vec::new() 
+         let mut acc = Vec::new();
+         let open = self.open_rules();
+         //TODO
+         //return expanded parseline from open ruleset
+         acc
       }
    }
 
