@@ -40,13 +40,18 @@ impl ParseLine {
       open
    }
 
-   pub fn poke(&self, c: char) -> Vec<ParseLine> {
+   pub fn passed_tokens(&self) -> usize {
+      self.satisfied_rules.iter().filter(|&n| *n == 0).count()
+   }
+
+   pub fn poke(&self, cs: &[char]) -> Vec<ParseLine> {
       if self.satisfied_rules.last()==Some(&-1) {
          //ROOT is closed
          Vec::new()
       } else {
          let mut acc = Vec::new();
          let open = self.open_rules();
+         let passed = self.passed_tokens();
          //TODO
          //return expanded parseline from open ruleset
          acc
@@ -123,10 +128,11 @@ impl ProbabilisticGrammar {
             satisfied_rules: vec![1],
          } ]
       } else { vec![] };
-      for c in cs.chars() {
+      let ccs = cs.chars().collect::<Vec<char>>();
+      for ci in 1..ccs.len()+1 {
          let mut new_lines: Vec<ParseLine> = Vec::new();
          for l in lines.iter() {
-            new_lines.append(&mut l.poke(c));
+            new_lines.append(&mut l.poke(&ccs[..ci]));
          }
          new_lines.sort_by(|a,b| a.probability().partial_cmp(&b.probability()).unwrap() );
          new_lines.reverse();
