@@ -20,6 +20,8 @@ pub struct ParseLine {
    //-n means close rule N
    //A ParseLine should contain exactly as many zeros as input characters
    //The ParseLine should also match each open rule to a closing rule at corresponding depth
+   //Additionally each rule always gets its own number, even if the rhs is the same
+   //For example, each rule in a sequence is given a unique numerical identifier
    pub grammar: Rc<ProbabilisticGrammar>,
    pub satisfied_rules: Vec<i64>,
 }
