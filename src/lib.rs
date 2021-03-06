@@ -114,15 +114,15 @@ impl Default for ProbabilisticGrammar {
 }
 
 impl ProbabilisticGrammar {
-   pub fn load<P: AsRef<std::path::Path>>(encf: P) -> Self {
+   pub fn load<P: AsRef<std::path::Path>>(_encf: P) -> Self {
       Default::default()
    }
 
-   pub fn train<P: AsRef<std::path::Path>>(&self, dat: P) {} 
+   pub fn train<P: AsRef<std::path::Path>>(&self, _dat: P) {} 
 
    pub fn recognize(&self, cs: &str) -> ParseResult {
       let rcs = Rc::new(self.clone());
-      let mut lines: Vec<ParseLine> = if let Some(gr) = &self.grammar_rules {
+      let mut lines: Vec<ParseLine> = if let Some(_) = &self.grammar_rules {
          vec![ ParseLine {
             grammar: rcs.clone(),
             satisfied_rules: vec![1],
