@@ -57,7 +57,7 @@ impl ParseLine {
 }
 
 pub struct GrammarNode {
-   accepts: Box<Fn(&Vec<char>) -> bool>,
+   pub accepts: Box<dyn Fn(&Vec<char>) -> bool>,
 }
 
 #[derive(Clone)]

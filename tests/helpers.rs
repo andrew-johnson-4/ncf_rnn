@@ -1,5 +1,5 @@
 use std::rc::Rc;
-use ncf_rnn::{ParseLine,ProbabilisticGrammar};
+use ncf_rnn::ParseLine;
 
 #[test]
 fn parse_line_open_rules() {
