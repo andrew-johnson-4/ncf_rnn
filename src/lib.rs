@@ -44,6 +44,15 @@ impl ParseLine {
       self.satisfied_rules.iter().filter(|&n| *n == 0).count()
    }
 
+   pub fn run_tokens(&self) -> usize {
+      let mut run = 0;
+      for &ti in self.satisfied_rules.iter() {
+         if ti==0 { run += 1; }
+         else { run = 0; }
+      }
+      run
+   }
+
    pub fn poke(&self, cs: &[char]) -> Vec<ParseLine> {
       assert!(self.satisfied_rules.len()>0);
       if self.satisfied_rules.last()==Some(&-1) {
