@@ -81,8 +81,18 @@ impl ParseLine {
                //gen if remaining: open(next); poke()
                //    else:         close(); poke()
             },
-            GrammarRule::Any(_id,_name,_rule) => {
-               //gen for each: open(); poke()
+            GrammarRule::Any(id,_name,rules) => {
+               if active==*id {
+                  for r in rules.iter() {
+                     let mut s = self.clone();
+                     s.satisfied_rules.push(r.id());
+                     acc.append(&mut s.poke(cs));
+                  }
+               } else {
+                  let mut s = self.clone();
+                  s.satisfied_rules.push(-id);
+                  acc.append(&mut s.poke(cs));
+               }
             },
          }
          acc
@@ -105,6 +115,16 @@ pub enum GrammarRule {
    Node(i64,String,Rc<GrammarNode>),
    Seq(i64,String,Vec<Rc<GrammarRule>>),
    Any(i64,String,Vec<Rc<GrammarRule>>),
+}
+
+impl GrammarRule {
+   pub fn id(&self) -> i64 {
+      match self {
+         GrammarRule::Node(id,_,_) => *id,
+         GrammarRule::Seq(id,_,_) => *id,
+         GrammarRule::Any(id,_,_) => *id,
+      }
+   }
 }
 
 
