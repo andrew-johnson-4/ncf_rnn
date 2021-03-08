@@ -12,7 +12,7 @@ impl ParseResult {
    }
 }
 
-
+#[derive(Clone)]
 pub struct ParseLine {
    //0 means continue current open node
    //1 means open ROOT
@@ -61,13 +61,21 @@ impl ParseLine {
       } else {
          let mut acc = Vec::new();
          let open = self.open_rules();
-         let passed = self.passed_tokens();
          let active = *open.last().unwrap();
          match self.grammar.lookup(active).as_ref() {
             //return expanded parseline from open ruleset
-            GrammarRule::Node(_id,_name,_node) => {
-               //gen maybe continue()
-               //and close(); poke()
+            GrammarRule::Node(id,_name,node) => {
+               let run = self.run_tokens();
+               if (node.accepts)(&cs[cs.len()-(run+1)..]) {
+                  let mut s = self.clone();
+                  s.satisfied_rules.push(0);
+                  acc.push(s);
+               }
+               {
+                  let mut s = self.clone();
+                  s.satisfied_rules.push(-id);
+                  acc.append(&mut s.poke(cs));
+               }
             },
             GrammarRule::Seq(_id,_name,_rule) => {
                //gen if remaining: open(next); poke()
@@ -87,7 +95,7 @@ impl ParseLine {
 }
 
 pub struct GrammarNode {
-   pub accepts: Box<dyn Fn(&Vec<char>) -> bool>,
+   pub accepts: Box<dyn Fn(&[char]) -> bool>,
 }
 
 #[derive(Clone)]
