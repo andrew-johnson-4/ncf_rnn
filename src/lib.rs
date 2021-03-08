@@ -65,9 +65,17 @@ impl ParseLine {
          let active = *open.last().unwrap();
          match self.grammar.lookup(active).as_ref() {
             //return expanded parseline from open ruleset
-            GrammarRule::Node(_id,_name,_node) => {},
-            GrammarRule::Seq(_id,_name,_rule) => {},
-            GrammarRule::Any(_id,_name,_rule) => {},
+            GrammarRule::Node(_id,_name,_node) => {
+               //gen maybe continue()
+               //and close(); poke()
+            },
+            GrammarRule::Seq(_id,_name,_rule) => {
+               //gen if remaining: open(next); poke()
+               //    else:         close(); poke()
+            },
+            GrammarRule::Any(_id,_name,_rule) => {
+               //gen for each: open(); poke()
+            },
          }
          acc
       }
