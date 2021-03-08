@@ -131,14 +131,14 @@ impl GrammarRule {
 #[derive(Clone)]
 pub struct ProbabilisticGrammar {
    //The dropdown_penalty hyper-parameter discourages parse lines that introduce many grammar nodes
-   dropdown_penalty: f64,
+   pub dropdown_penalty: f64,
 
    //The max_lines hyper-parameter is the maximum number of active parse lines for a parse attempt
    //Extra lines over this limit will be pruned based on their perplexity score
-   max_lines: usize,
+   pub max_lines: usize,
 
    //This is the grammar starting from ROOT
-   grammar_rules: Option<Rc<GrammarRule>>,
+   pub grammar_rules: Option<Rc<GrammarRule>>,
 
    //This is used for calculating posteriors, which are flattened into a DFA graph
    //This is not for parsing directly, because parsing is still Context Free
@@ -146,10 +146,10 @@ pub struct ProbabilisticGrammar {
    //   3n-3  is  continue rule N
    //   3n-2  is  open rule N
    //   3n-1  is  close rule N
-   grammar_tensor: Rc<Array2<f64>>,
+   pub grammar_tensor: Rc<Array2<f64>>,
 
    //This index is for quick retrieval of grammar rules during parsing
-   grammar_index: Rc<Vec<Rc<GrammarRule>>>,
+   pub grammar_index: Rc<Vec<Rc<GrammarRule>>>,
 }
 
 impl Default for ProbabilisticGrammar {
