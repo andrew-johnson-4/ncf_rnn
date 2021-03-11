@@ -1,0 +1,9 @@
++ROOT  = expr 
++expr  = add
++add   = mul "+" add
++add   = mul "-" add
++mul   = atom "*" mul
++mul   = atom "/" mul
++atom  = "(" expr ")"
++atom  = const
++const = [0-9]+
